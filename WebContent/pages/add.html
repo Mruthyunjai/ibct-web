@@ -1,7 +1,29 @@
 <html ng-app="ibct-web">
 <head>
-<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script>
+<script
+	src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script>
 <script src="../javascript/ibct-angular.js"></script>
+<script type="text/javascript">
+	$(document).ready(function() {   
+    setHeight();
+	$('#timeID').change(function() {
+            console.log($(this).val());
+        }).multipleSelect({
+            width: '100%'
+        });
+});
+
+$(window).resize(function() {
+     setHeight();   
+}); 
+
+function setHeight() {
+    windowHeight = $('#page-wrapper').innerHeight();
+    //$('.contentBG').css('min-height', windowHeight);   
+    console.log(windowHeight);
+ 	 $('.sidebar').css({'min-height':windowHeight,'background-color':'rgb(47, 156, 228)'});
+}
+	</script>
 </head>
 
 <div class="row row-margin">
@@ -12,7 +34,7 @@
 	<!-- /.col-lg-12 -->
 </div>
 <!-- /.row -->
-<div class="row"  >
+<div class="row" ng-controller="addController">
 	<div class="col-lg-12">
 		<h3 style="font-weight: bolder; margin-left: 14px;">Manage
 			Bulletins</h3>
@@ -20,27 +42,34 @@
 			Product line and Bulleting Type. Fields marked with asterisk (*) are
 			required.</p>
 	</div>
-	<div class="col-lg-12" >
+	<div class="col-lg-12">
 		<div class="panel">
 			<div class="panel-heading" style="background-color: #F2EFEB;">
 				Add Bulletin</div>
-			<div class="panel-body" ng-controller="addController">
+			<div class="panel-body">
 				<table>
 					<tbody>
 						<tr>
 							<td style="width: 14%;"><label for="disabledSelect"><font
 									color="red">*</font>Product Line:</label></td>
-							<td style="width: 28%;"><select id="disabledSelect" ng-model="addController.productLines" 
-							ng-options="pl.productLine for pl in productLines track by pl.productLine"
-								class="form-control"><option>select</option>
-									<!-- <option>1</option>
-									<option>5</option> --></select></td>
+							<td style="width: 28%;"><select id="disabledSelect"
+								ng-model="addController.productLines"
+								ng-options="pl.productLine for pl in productLines track by pl.productLine"
+								ng-change="enableButton()" class="form-control"><option
+										value="">select</option>
+							</select></td>
 							<td></td>
+
 							<td style="width: 19%;"><label for="disabledSelect"><font
 									color="red">*</font>Bulletin Type:</label></td>
 							<td style="width: 28%;"><select id="disabledSelect"
-								class="form-control" style=""><option>select</option></select></td>
-							<td style=""><button type="button" class="btn btn-ge">Add
+								ng-model="addController.bulletinTypes"
+								ng-options="bl for bl in bulletinTypes"
+								ng-change="enableButton()" class="form-control" style=""><option
+										value="">select</option></select></td>
+
+							<td style=""><button type="button" class="btn btn-ge"
+									ng-disabled="buttonLink" ng-click="enableForm()">Add
 									Bulletin</button></td>
 						</tr>
 						<tr style="padding: 0px;">
@@ -50,8 +79,6 @@
 						</tr>
 					</tbody>
 				</table>
-
-
 			</div>
 		</div>
 	</div>
@@ -65,42 +92,54 @@
 					<tbody>
 						<tr>
 							<td><label>Bulletin Type:</label></td>
-							<td>Prdouct</td>
+							<td ng-disabled="formLink">
+								{{addController.bulletinTypes.bulletinType}}</td>
 							<td><label>Product Line:</label></td>
-							<td>TM2500</td>
+							<td>{{addController.productLines.productLine}}</td>
 							<td></td>
 						</tr>
 
 						<tr>
 							<td style="width: 15%;"><label><font color="red">*</font>Bulletin#:</label></td>
 							<td style="width: 25%;"><input type="textbox"
-								class="form-control"></td>
+								ng-disabled="formLink" class="form-control"></td>
 							<td style="width: 21%;"><label><font color="red">*</font>Revision:</label></td>
 							<td style="width: 26%;"><input type="textbox"
-								class="form-control"></td>
+								ng-disabled="formLink" class="form-control"></td>
 						</tr>
 
 						<tr>
 							<td><label><font color="red">*</font>Description:</label></td>
-							<td><input type="textbox" class="form-control"></td>
+							<td><input type="textbox" ng-disabled="formLink"
+								class="form-control"></td>
 							<td><label>Supercedes:</label></td>
-							<td><select style="width: 100%;" class="form-control"><option>select</option></select></td>
+							<td><select style="width: 100%;" ng-disabled="formLink"
+								class="form-control"><option>select</option></select></td>
 						</tr>
 
 
 						<tr>
 							<td><label><font color="red">*</font>Category:</label></td>
-							<td><select class="form-control" style="width: 100%;"><option>select</option></select></td>
+							<td><select class="form-control" style="width: 100%;"
+								ng-model="addController.category" ng-disabled="formLink"
+								ng-options="c.Category for c in category track by c.Category"><option
+										value="">select</option></select></td>
 							<td><label><font color="red">*</font>Compliance
 									Level:</label></td>
-							<td><select class="form-control" style="width: 100%;"><option>select</option></select></td>
+							<td><select class="form-control" ng-disabled="formLink"
+								style="width: 100%;" ng-model="addController.complianceLevel"
+								ng-options="cl.compLevel for cl in complianceLevel track by cl.compLevel"><option
+										value="">select</option></select></td>
 						</tr>
 
 
 						<tr>
 							<td><label><font color="red">*</font>Timing:</label></td>
 							<td colspan="3"><select id="timeID" multiple="multiple"
-								class="form-control" style="width: 100%;"><option>select</option>
+								class="form-control" style="width: 100%;"
+								ng-model="addController.timing"
+								ng-options="t.Timing for t in timing track by t.Timing"
+								ng-disabled="formLink"><option>select</option>
 									<option>select</option>
 									<option>select</option>
 									<option>select</option>
@@ -111,31 +150,33 @@
 						<tr>
 							<td><label><font color="red">*</font>Rev Date:</label></td>
 							<td><input type="date" ng-bind="ComplainceDate"
-								class="form-control ng-binding" style="width: 100%;"></td>
+								ng-disabled="formLink" class="form-control ng-binding"
+								style="width: 100%;"></td>
 							<td><label>Track Implementation Plan:</label></td>
-							<td><input type="checkbox"></td>
+							<td><input type="checkbox" ng-disabled="formLink"></td>
 						</tr>
 
 						<tr>
 							<td><label><font color="red">*</font>Issue Date:</label></td>
 							<td><input type="date" ng-bind="ComplainceDate"
-								class="form-control ng-binding" style="width: 100%;"></td>
+								ng-disabled="formLink" class="form-control ng-binding"
+								style="width: 100%;"></td>
 							<td><label>Significant:</label></td>
-							<td><input type="checkbox"></td>
+							<td><input type="checkbox" ng-disabled="formLink"></td>
 						</tr>
 
 						<tr>
 							<td><label><font color="red">*</font>Voucher
 									Program:</label></td>
-							<td><input type="checkbox"></td>
+							<td><input type="checkbox" ng-disabled="formLink"></td>
 							<td><label>Significant:</label></td>
-							<td><input type="checkbox"></td>
+							<td><input type="checkbox" ng-disabled="formLink"></td>
 						</tr>
 
 						<tr>
 							<td><label>Remarks:</label></td>
 							<td colspan="3"><textarea class="form-control"
-									style="width: 100%;"></textarea></td>
+									style="width: 100%;" ng-disabled="formLink"></textarea></td>
 
 						</tr>
 
@@ -159,7 +200,11 @@
 								<td><label>To:</label></td>
 							</tr>
 							<tr>
-								<td><select name="num" multiple="" style="width: 100%;">
+								<td><select name="num" multiple="multiple"
+									style="width: 100%;" ng-model="addController.fromSerialNo"
+									ng-options="fsn.fSerNo for fsn in fromSerialNo track by fsn.fSerNo"
+									ng-disabled="formLink">
+
 										<option value="1">1</option>
 										<option value="2">2</option>
 										<option value="3">3</option>
@@ -170,13 +215,14 @@
 										<tbody>
 											<tr>
 												<td>
-													<button type="button" class="btn btn-ge btn-width">Add</button>
+													<button type="button" class="btn btn-ge btn-width"
+														ng-disabled="formLink">Add</button>
 												</td>
 											</tr>
 											<tr>
 												<td>
-													<button type="button" class="btn btn-ge btn-width">Clear</button>
-													<!-- <button id="save" style="background: url('../images/add_off.gif');    background-size: initial;    width: 67px;    height: 17px;    border: none;    background-repeat: no-repeat;"></button>
+													<button type="button" class="btn btn-ge btn-width"
+														ng-disabled="formLink">Clear</button> <!-- <button id="save" style="background: url('../images/add_off.gif');    background-size: initial;    width: 67px;    height: 17px;    border: none;    background-repeat: no-repeat;"></button>
 					<br/>
 					<button id="save" style="background: url('../images/clear_off.gif');    background-size: initial;    width: 70px;    height: 17px;    border: none;    background-repeat: no-repeat;"></button> -->
 												</td>
@@ -184,7 +230,10 @@
 										</tbody>
 									</table>
 								</td>
-								<td><select name="num" multiple="" style="width: 100%;">
+								<td><select name="num" multiple="" style="width: 100%;"
+									ng-model="addController.toSerialNo"
+									ng-options="tsn.tSerNo for tsn in toSerialNo track by tsn.tSerNo"
+									ng-disabled="formLink">
 										<option value="1">1</option>
 										<option value="2">2</option>
 										<option value="3">3</option>
@@ -208,14 +257,14 @@
 								<td><label>To Serial#:</label></td>
 							</tr>
 							<tr>
-								<td><input type="checkbox"></td>
+								<td><input type="checkbox" ng-disabled="formLink"></td>
 								<td><span>123</span></td>
 								<td><span>123</span></td>
 							</tr>
 							<tr>
 								<td colspan="3" style="border: none;">
-									<button id="delete" class="btn btn-ge btn-width">Delete</button>
-									<!-- <button id="save" style="background: url('../images/delete_off.gif');    background-size: initial;    width: 67px;    height: 17px;    border: none;    background-repeat: no-repeat;"></button> -->
+									<button id="delete" class="btn btn-ge btn-width"
+										ng-disabled="formLink">Delete</button> <!-- <button id="save" style="background: url('../images/delete_off.gif');    background-size: initial;    width: 67px;    height: 17px;    border: none;    background-repeat: no-repeat;"></button> -->
 									<!-- <img src="../images/clear_off.gif"//> -->
 								</td>
 							</tr>
@@ -234,9 +283,12 @@
 						<!-- <button id="save" style="background: url('../images/save_off.gif');    background-size: initial;    width: 67px;    height: 17px;    border: none;    background-repeat: no-repeat;"></button>
 					<button id="clear" style="background: url('../images/clear_off.gif');    background-size: initial;    width: 70px;    height: 17px;    border: none;    background-repeat: no-repeat;"></button>
 					<button id="close" style="background: url('../images/close_off.gif');    background-size: initial;    width: 67px;    height: 17px;    border: none;    background-repeat: no-repeat;"></button> -->
-						<button id="save" class="btn btn-ge btn-width">Save</button>
-						<button id="clear" class="btn btn-ge btn-width">Clear</button>
-						<button id="cancel" class="btn btn-ge btn-width">Cancel</button>
+						<button id="save" class="btn btn-ge btn-width"
+							ng-disabled="formLink">Save</button>
+						<button id="clear" class="btn btn-ge btn-width"
+							ng-disabled="formLink">Clear</button>
+						<button id="cancel" class="btn btn-ge btn-width"
+							ng-disabled="formLink">Cancel</button>
 					</td>
 				</tr>
 

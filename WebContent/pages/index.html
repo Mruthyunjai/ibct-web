@@ -130,7 +130,8 @@ padding-left: 0px;
     /*margin-top: 19px;*/
 }
 .navbar-right li > a {
-    color: #3a5dae;
+    /*color: #3a5dae;*/
+    color:#fff;
 }
 .special-img {
     position: relative;
@@ -171,9 +172,18 @@ footer>p{    color: #FFF !important;
 .btn-ge{
     border-radius: 0px;
     width: 130px;
-    background-color: #988792 !important;
+      background-color: #7f6d79;
     color: #fff;
     font-weight: bolder;}
+    
+    
+.btn-ge:focus, .btn.btn-ge:hover {
+    background-color: #988792;
+    color: #fff;
+}
+#wrapper {background-color: rgb(47, 156, 228);}/* for temo purpose */
+.dropdown-user > li >a {  color:#333;}
+    
 	.panel-heading{    background-color: #F2EFEB;
     font-size: 16px;
     font-weight: bolder;}
@@ -185,6 +195,7 @@ footer>p{    color: #FFF !important;
     border-bottom: 1px solid #66afe9;
     
 }
+.header-username{color:white;}
 </style>
 <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Tangerine">
 
@@ -218,7 +229,7 @@ footer>p{    color: #FFF !important;
                             <a href="#AddBulletin" id="addBulletin"><i class="fa fa-book fa-fw"></i>  Add Bulletin</a>
                         </li>
 						 <li>
-                            <a href="#"><i class="fa fa-edit fa-fw"></i>  Update Bulletin</a>
+                            <a href="#UpdateBulletin"><i class="fa fa-edit fa-fw"></i>  Update Bulletin</a>
                         </li>
 						 <li>
                             <a href="#"><i class="fa fa-ban fa-fw"></i>  Cancel Bulletin</a>
@@ -325,7 +336,8 @@ footer>p{    color: #FFF !important;
            <ul class="nav navbar-top-links navbar-right">
 		   <li>    <a href="#" onclick="return false">
 					<img src="../images/profile.png" class="img-circle special-img">
-					<span class="header-username" style="color: white;">Mruthyunjay Velagapudi</span>
+					Mruthyunjay Velagapudi
+					<!--  <span class="header-username">Mruthyunjay Velagapudi</span> -->
 				</a>
 			</li>
                 <li class="">
@@ -406,6 +418,9 @@ avionics, electrical power and mechanical systems for aircraft.</p>
         }).multipleSelect({
             width: '100%'
         });
+	$('ul li a').click(function(){
+		//setHeight();
+	});
 });
 
 $(window).resize(function() {
@@ -416,7 +431,7 @@ function setHeight() {
     windowHeight = $('#page-wrapper').innerHeight();
     //$('.contentBG').css('min-height', windowHeight);   
     console.log(windowHeight);
- 	 $('.sidebar').css({'min-height':windowHeight,'background-color':'rgb(47, 156, 228)'});
+ 	// $('.sidebar').css({'min-height':windowHeight,'background-color':'rgb(47, 156, 228)'});
 }
 	</script>
 
