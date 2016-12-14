@@ -196,6 +196,10 @@ footer>p{    color: #FFF !important;
     
 }
 .header-username{color:white;}
+ .ms-parent {
+            width: 100% !important;
+        }
+        label{font-size:14px;}
 </style>
 <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Tangerine">
 
@@ -232,27 +236,27 @@ footer>p{    color: #FFF !important;
                             <a href="#UpdateBulletin"><i class="fa fa-edit fa-fw"></i>  Update Bulletin</a>
                         </li>
 						 <li>
-                            <a href="#"><i class="fa fa-ban fa-fw"></i>  Cancel Bulletin</a>
+                            <a href="#Cancel"><i class="fa fa-ban fa-fw"></i>  Cancel Bulletin</a>
                         </li> 
 						
 						<li class="dropdown">
 							<a href="#"><i class="fa fa-bars fa-fw"></i> Bulletin Compliance</a>
 							<ul class="dropdown-menu sub-menu">						
 						<li>
-                            <a href="#"><i class="fa fa-crosshairs fa-fw"></i>  Bulletin Compliance By Number</a>
+                            <a href="#/Number"><i class="fa fa-crosshairs fa-fw"></i>  Bulletin Compliance By Number</a>
                         </li> 
 						<li>
-                            <a href="#"><i class="fa fa-info-circle fa-fw"></i>  Fleet Summary Bulletin Compliance</a>
+                            <a href="#/Fleet"><i class="fa fa-info-circle fa-fw"></i>  Fleet Summary Bulletin Compliance</a>
                         </li> 
 						<li>
-                            <a href="#"><i class="fa fa-check-circle-o fa-fw"></i>  Bulletin Compliance By Engine</a>
+                            <a href="#/Engine"><i class="fa fa-check-circle-o fa-fw"></i>  Bulletin Compliance By Engine</a>
                         </li> 
 						<li>
-                            <a href="#"><i class="fa fa-folder fa-fw"></i>  Bulletin Compliance By Package</a>
+                            <a href="#/Package"><i class="fa fa-folder fa-fw"></i>  Bulletin Compliance By Package</a>
                         </li>
 					
 					</ul>
-			</li>	 </ul>				
+			</li>		 </ul>				
 						 </li><li>
                             <a href="#"><i class="fa fa-gears fa-fw"></i> Manage Product Tracking </a>
                         </li>
@@ -310,6 +314,11 @@ footer>p{    color: #FFF !important;
                         <i class="fa fa-retweet fa-fw">  </i> inside GEPS
                     </a>                   
                 </li>
+                <li class="dropdown">
+                    <a class="dropdown-toggle" href="#">
+                        <i class="fa fa-edit fa-fw">  </i> Applicaiton Support
+                     </a>                   
+                </li>
                 <!-- /.dropdown -->
             </ul><!-- /.navbar-top-links -->
 
@@ -347,8 +356,8 @@ footer>p{    color: #FFF !important;
                      <ul class="dropdown-menu dropdown-user">
                         <li><a href="#"><i class="fa fa-user fa-fw"></i> User Profile</a>
                         </li>
-						<li><a href="#"><i class="fa fa-edit fa-fw"></i> Help Desk</a>
-                        </li>
+						<!-- <li><a href="#"><i class="fa fa-edit fa-fw"></i> Help Desk</a>
+                        </li>-->
                         <li><a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a>
                         </li>
                         <li class="divider"></li>
@@ -395,7 +404,7 @@ avionics, electrical power and mechanical systems for aircraft.</p>
 
 <p>How can we help you?</p>
 
-<p><a style="color:#186ab9; cursor:pointer">Applicaiton Support <i class="fa fa-arrow-right"></i></a></p>
+<!-- <p><a style="color:#186ab9; cursor:pointer">Applicaiton Support <i class="fa fa-arrow-right"></i></a></p> -->
 
 <p><a style="color:#186ab9; cursor:pointer;">Help Docs <i class="fa fa-arrow-right"></i></a></p>
           
@@ -411,7 +420,7 @@ avionics, electrical power and mechanical systems for aircraft.</p>
     <!-- jQuery -->
  <script src="../vendor/jquery/jquery.min.js"></script>
 	<script type="text/javascript">
-	$(document).ready(function() {   
+	/* $(document).ready(function() {   
     setHeight();
 	$('#timeID').change(function() {
             console.log($(this).val());
@@ -433,11 +442,13 @@ function setHeight() {
     console.log(windowHeight);
  	// $('.sidebar').css({'min-height':windowHeight,'background-color':'rgb(47, 156, 228)'});
 }
+	*/
 	</script>
 
     <!-- Bootstrap Core JavaScript -->
 <script src="../vendor/bootstrap/js/bootstrap.min.js"></script>
 <script  src="../javascript/ge-multiple-select.js"></script>
+<script  src="../javascript/directive.multi-select.js"></script>
 
     <!-- Metis Menu Plugin JavaScript -->
     <!-- <script src="../vendor/metisMenu/metisMenu.min.js"></script> -->

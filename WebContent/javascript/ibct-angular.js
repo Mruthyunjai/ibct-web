@@ -15,6 +15,9 @@ app.config(function($routeProvider, $locationProvider) {
 	}).when("/Home", {
 		templateUrl : "Index.html",
 		controller : "mainController"
+	}).when("/Cancel", {
+		templateUrl : "cancel.html",
+		controller : "cancelController"
 	});
 });
 
@@ -114,96 +117,93 @@ app
 					}, {
 						"compLevel" : "SPS-SPS CONVERSION"
 					} ];
-					$scope.timing = [
-							{
-								"Timing" : "0 - NONE"
-							},
-							{
-								"Timing" : "1 - PRIOR TO START-UP/ENGINE OPERATION"
-							},
-							{
-								"Timing" : "2 - AT FIRST OPPORTUNITY (NEXT PI OR SHUTDOWN AT LATEST)"
-							},
-							{
-								"Timing" : "3 - AT FIRST OPPORTUNITY PRIOR TO TSN/CSN LIMIT"
-							},
-							{
-								"Timing" : "4 - AT FIRST EXPOSURE OF EMU/MODULE"
-							},
-							{
-								"Timing" : "5 - AT COMPONENT PART EXPOSURE"
-							},
-							{
-								"Timing" : "6 - AT COMPONENT PART REPAIR OR REPLACEMENT"
-							}, {
-								"Timing" : "7 - OPTIONAL"
-							}, {
-								"Timing" : "8 - AT NEXT DEPOT VISIT"
-							}, {
-								"Timing" : "9 - NOT PLANNED BY CUSTOMER"
-							} ];
 					
-					 
-					/*$scope.fromSN = [ {
-						"serialNum" : "1"
-					}, {
-						"serialNum" : "2"
-					}, {
-						"serialNum" : "3"
-					}, {
-						"serialNum" : "4"
-					}, {
-						"serialNum" : "5"
-					}, {
-						"serialNum" : "6"
-					}, {
-						"serialNum" : "7"
-					}, {
-						"serialNum" : "8"
-					}, {
-						"serialNum" : "9"
-					}, {
-						"serialNum" : "10"
-					} ];
-					$scope.toSN = [ {
-						"serialNumb" : "1"
-					}, {
-						"serialNumb" : "2"
-					}, {
-						"serialNumb" : "3"
-					}, {
-						"serialNumb" : "4"
-					}, {
-						"serialNumb" : "5"
-					}, {
-						"serialNumb" : "6"
-					}, {
-						"serialNumb" : "7"
-					}, {
-						"serialNumb" : "8"
-					}, {
-						"serialNumb" : "9"
-					}, {
-						"serialNumb" : "10"
-					} ];
-					$scope.formLink = true;
-					$scope.serialNumber = [];
-					$scope.toSerNLink = false;
-					$scope.disableToSN = function(fromSN) {
-						if (fromSN.length > 1)
-							$scope.toSerNLink = true;
-						else
-							$scope.toSerNLink = false;
-
+					$http
+					.get('http://localhost:8090/ibct/Bulletin/TimingCodes')
+					.then(function(response) {
+						
+						$scope.timing = response.data.data;
+						console.log($scope.timing);
+					});
+					function getBulletinTypeCode(bulletintype){
+						if (bulletintype == "PRODUCT BULLETIN") {
+							return 20000043;
+						}
+						else if (bulletintype == "SERVICE BULLETIN") {
+							return 20000042;
+						}
+						else if (bulletintype == "SYSTEM BULLETIN") {
+							return 2726;
+						}
+						else{
+							return 0;
+						}
 					}
-					/*$scope.addSN = function(fromSN, toSN) {
+					$scope.enableForm = function() {
+						$scope.formLink = false;
+						$scope.serialuri = 'http://localhost:8090/ibct/Bulletin/Serials/'+this.addController.productLines.productLine+'/';
+					
+						
+						if (this.addController.bulletinTypes == "PRODUCT BULLETIN") {
+							$scope.serialuri = $scope.serialuri+'20000043';
+							$scope.typecode = 20000043
+						}
+						else if (this.addController.bulletinTypes == "SERVICE BULLETIN") {
+							$scope.serialuri=$scope.serialuri+'20000042';
+							$scope.typecode = 20000042
+						}
+						else if (this.addController.bulletinTypes == "SYSTEM BULLETIN") {
+							$scope.serialuri=$scope.serialuri+'2726';
+							$scope.typecode =2726
+						}
+						else{
+							return 0;
+						}
+						
+						$scope.superceedUri = $scope.superceedUri + this.addController.productLines.productLine;
+						console.log($scope.serialuri);
+						$http
+						.get(
+								$scope.serialuri)
+						.then(function(response) {
+							console.log(response.data);
+							$scope.fromSN = response.data.data;
+							$scope.toSN = response.data.data;
+						});
+						$scope.supercedes = [];
+						$scope.superdata = {"productLine" : this.addController.productLines.productLine,
+								"bulletinTypeCode" :$scope.typecode,
+								"bulletinStatus" : 'EFFECTIVE'};
+						console.log($scope.superdata);
+						$http(
+								{
+									method : 'POST',
+									url : 'http://localhost:8090/ibct/Bulletin/Superced',
+									dataType : 'json',
+									data : JSON.stringify($scope.superdata),
+									headers : {
+										'Content-Type' : 'application/json'
+									}
+								}).success(
+								function(data, status, headers, config) {
+									 $scope.supercedes =data.data ;
+									console.log(data);
+								}).error(
+								function(data, status, headers, config) {
+									console.log(status);
+								});
+						this.addController.supercedes=$scope.supercedes;
+						
+					}
+					$scope.serialNumber = [];
+					$scope.addSN = function(fromSN, toSN) {
 						if ((fromSN.length == 1) && toSN) {
-							if (fromSN[0].serialNum >= toSN.serialNumb) {
+							if (fromSN >= toSN) {
 								alert("To Serial Number should be greater than from Serial Number")
 							} else {
 								$scope.serialNumber.push({
-									fromSNum : fromSN[0].serialNum,
-									toSNum : toSN.serialNumb
+									fromSNum : fromSN[0],
+									toSNum : toSN
 								});
 							}
 						}
@@ -212,45 +212,15 @@ app
 
 							for (i = 0; i < fromSN.length; i++) {
 								$scope.serialNumber.push({
-									fromSNum : fromSN[i].serialNum,
+									fromSNum : fromSN[i],
 									toSNum : ""
 								});
 							}
 						}
 						console.log($scope.serialNumber);
 					}
-						/*
-						 * $scope.serialNumber.fromSNum=(fromSN.serialNum);
-						 * $scope.serialNumber.toSNum=(toSN.serialNumb);
-						 */
-						/* $scope.serialNumber.push({fromSNum:fromSN}); */
-						// console.log( $scope.serialNumber);
-					 // Clear input fields after push
-
-					$scope.enableForm = function() {
-						$scope.formLink = false;
-						$scope.serialuri = 'http://localhost:8090/ibct/Bulletin/Serials/'+this.addController.productLines.productLine+'/';
-						if (this.addController.bulletinTypes == "PRODUCT BULLETIN") {
-							$scope.serialuri = $scope.serialuri+'20000043';
-						}
-						else if (this.addController.bulletinTypes == "SERVICE BULLETIN") {
-							$scope.serialuri=$scope.serialuri+'20000042';
-						}
-						else if (this.addController.bulletinTypes == "SYSTEM BULLETIN") {
-							$scope.serialuri=$scope.serialuri+'2726';
-						}
-						else{
-							return 0;
-						}
-						console.log($scope.serialuri);
-						$http
-						.get(
-								$scope.serialuri)
-						.then(function(response) {
-							console.log(response.data);
-							$scope.fromSN = response.data.data;
-						});
-					}
+					
+					
 					$scope.buttonLink = true;
 					$scope.enableButton = function() {
 						console
@@ -346,20 +316,41 @@ app
 						 * JSON.stringify(this.addController.timing));
 						 */
 						$scope.bulletinValues.Bulletin = this.addController.bulletin;
-						$scope.bulletinValues.BulletinTypeCode = this.addController.bulletinTypes;
+						$scope.bulletinValues.BulletinTypeCode =getBulletinTypeCode(this.addController.bulletinTypes);// this.addController.bulletinTypes;
 						$scope.bulletinValues.Revision = this.addController.revision;
 						$scope.bulletinValues.Description = this.addController.description;
 						$scope.bulletinValues.Supercedes = this.addController.supercedes;
 						$scope.bulletinValues.Category = this.addController.category.Category;
 						$scope.bulletinValues.ComplianceLevel = this.addController.complianceLevel.compLevel;
-						$scope.bulletinValues.Timing = this.addController.timing.Timing;
-						$scope.bulletinValues.RevDate = this.addController.revDate;
-						$scope.bulletinValues.TrackImplementationPlan = this.addController.trackImplementationPlan;
-						$scope.bulletinValues.IssueDate = this.addController.issueDate;
-						$scope.bulletinValues.Significant = this.addController.significant;
-						$scope.bulletinValues.VoucherProgram = this.addController.voucherProgram;
+						$scope.bulletinValues.Timing = getFields(this.addController.timing,'codeID');
+						$scope.bulletinValues.RevDate = this.addController.revDate.getDate();
+						if(this.addController.trackImplementationPlan){
+							$scope.bulletinValues.TrackImplementationPlan = this.addController.trackImplementationPlan;
+							}
+						else{
+								$scope.bulletinValues.TrackImplementationPlan = false;
+							}
+						if(this.addController.significant){
+							$scope.bulletinValues.Significant = this.addController.significant;
+						}
+						else{
+							$scope.bulletinValues.Significant = false;
+						}
+						$scope.bulletinValues.IssueDate = this.addController.issueDate.getDate();
+						if(this.addController.voucherProgram){
+							$scope.bulletinValues.VoucherProgram = this.addController.voucherProgram;
+						}
+						else{
+							$scope.bulletinValues.VoucherProgram = false;
+						}
+						if(this.addController.fieldImplementationMetric){
+							$scope.bulletinValues.fieldImplementationMetric = this.addController.fieldImplementationMetric;
+						}
+						else{
+							$scope.bulletinValues.fieldImplementationMetric = false;
+						}
 						$scope.bulletinValues.serialNumbers = $scope.serialNumber;
-						$scope.bulletinValues.Remarks = "";
+						$scope.bulletinValues.Remarks = this.addController.remarks;
 						$scope.bulletinValues.ProductLine = this.addController.productLines.productLine;
 						$scope.bulletinValues.fromSerials = getFields(
 								$scope.bulletinValues.serialNumbers, 'fromSNum');
@@ -382,16 +373,19 @@ app
 												"significant" : $scope.bulletinValues.Significant,
 												"voucherProgram" : $scope.bulletinValues.VoucherProgram,
 												"remarks" : $scope.bulletinValues.Remarks,
-												"bulletinTypeCode" : "",
+												"bulletinTypeCode" : getBulletinTypeCode(this.addController.bulletinTypes),
 												"latestRevId" : $scope.bulletinValues.Revision,
 												"createdBy" : "502353971",
 												"productLine" : $scope.bulletinValues.ProductLine,
 												"description" : $scope.bulletinValues.Description,
 												"revision" : $scope.bulletinValues.Revision,
 												"createdBy" : "jai",
-												"timing" : $scope.bulletinValues.Timing,
+												"timings" :$scope.bulletinValues.Timing,
 												"fromserials" : $scope.bulletinValues.fromSerials,
-												"toserials" : $scope.bulletinValues.toSerials
+												"toserials" : $scope.bulletinValues.toSerials,
+												"fieldImplementationMetric" : $scope.bulletinValues.fieldImplementationMetric,
+												"issueDate":$scope.bulletinValues.IssueDate,
+												"revisionDate":$scope.bulletinValues.RevDate
 											}),
 									headers : {
 										'Content-Type' : 'application/json'
@@ -415,4 +409,99 @@ app
 
 app.controller('updateController', function($scope, $http) {
 
+});
+app.controller('cancelController', function($scope, $http) {
+	//$scope.productLine = [];
+	
+	$http
+	.get('http://localhost:8090/ibct/Product')
+	.then(function(response) {
+		
+		$scope.productLines = response.data.data;
+	});
+	$http
+	.get(
+			'http://localhost:8090/ibct/Bulletin/BulletinTypes')
+	.then(function(response) {
+		console.log(response.data.data);
+		$scope.bulletinTypes = response.data.data;
+	});
+	
+	$scope.fillBulletins = function(){
+		
+		if(this.cancelController.bulletinTypes && this.cancelController.productLines.productLine){
+			$http(
+					{
+						method : 'POST',
+						url : 'http://localhost:8090/ibct/Bulletin/Bulletins',
+						dataType : 'json',
+						data : JSON.stringify({
+							"bulletinTypeCode" : getBulletinTypeCode(this.cancelController.bulletinTypes),
+							"productLine":this.cancelController.productLines.productLine
+						}),
+						headers : {
+							'Content-Type' : 'application/json'
+						}
+					}).success(
+					function(data, status, headers, config) {
+						// this callback will be called
+						// asynchronously
+						// when the response is available
+						$scope.bulletinNumbers = data.data;
+						$scope.bulletins = data.data;
+					}).error(
+					function(data, status, headers, config) {
+						// called asynchronously if an error occurs
+						// or server returns response with an error
+						// status.
+						console.log(status);
+					});
+		}
+	}
+	$scope.cancelBulletin = function(status){
+		if(this.cancelController.bulletinNumbers.bulletinStatus=='EFFECTIVE'){
+			console.log(this.cancelController.bulletinNumbers);
+		$http(
+				{
+					method : 'POST',
+					url : 'http://localhost:8090/ibct/Bulletin/CancelBulletin',
+					dataType : 'json',
+					data : JSON.stringify({
+						"bulletinNum" : this.cancelController.bulletinNumbers.bulletinNum
+					}),
+					headers : {
+						'Content-Type' : 'application/json'
+					}
+				}).success(
+				function(data, status, headers, config) {
+					// this callback will be called
+					// asynchronously
+					// when the response is available
+					$scope.fillBulletins();
+				}).error(
+				function(data, status, headers, config) {
+					// called asynchronously if an error occurs
+					// or server returns response with an error
+					// status.
+					console.log(status);
+				});
+		}
+	}
+	
+	
+	
+	function getBulletinTypeCode(bulletintype){
+		if (bulletintype == "PRODUCT BULLETIN") {
+			return 20000043;
+		}
+		else if (bulletintype == "SERVICE BULLETIN") {
+			return 20000042;
+		}
+		else if (bulletintype == "SYSTEM BULLETIN") {
+			return 2726;
+		}
+		else{
+			return 0;
+		}
+	}
 });

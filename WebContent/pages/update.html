@@ -3,6 +3,18 @@
 <script
 	src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script>
 <script src="../javascript/ibct-angular.js"></script>
+<style>.panel-body {
+    padding: 15px;
+}
+.table-border>tbody>tr>th {
+    padding: 12px;
+    border-top: 0px solid #ddd;
+    border: 3px solid #f2efeb;
+}
+.table-border>tbody>tr>td {
+    text-align: center;
+    border: 3px solid #f2efeb;
+}</style>
 </head>
 
 <div class="row row-margin">
@@ -71,9 +83,7 @@
 			<div class="panel-body">
 				<table style="">
 					<tbody>
-						<tr>
-							<td colspan="5" style=""></td>
-						</tr>
+						
 						<tr>
 							<td><label>Bulletin#:</label></td>
 							<td colspan="3">BBB</td>
@@ -92,12 +102,7 @@
 							<td><label>Supercedes</label></td>
 							<td>2500</td>
 						</tr>
-						<tr>
-							<td></td>
-						</tr>
-						<tr>
-							<td colspan="5" style=""></td>
-						</tr>
+						
 					</tbody>
 				</table>
 
@@ -109,32 +114,32 @@
 		<div class="panel">
 			<div class="panel-heading" style="background-color: #F2EFEB;">
 				Bulletin</div>
-			<div class="panel-body">
-				<table class="">
-					<tbody>
-						<tr>
-							<th>Select</th>
-							<th>Revision</th>
-							<th>Rev Date</th>
-							<th style="width: 342px; text-align: center;">Description</th>
-							<th>Category</th>
-							<th>Compliance Level</th>
-							<th>Track Implementation Plan</th>
-						</tr>
-						<tr>
-							<td><input type="checkbox"></td>
-							<td>ABCD</td>
-							<td>12/11/2016</td>
-							<td>ABCD</td>
-							<td>ALERT</td>
-							<td>Depot</td>
-							<td>N</td>
-						</tr>
-					</tbody>
-				</table>
-
-
-			</div>
+<div class="panel-body">		
+<table class="table-border">
+						  <tbody><tr>
+						  <th>Select</th>
+						  <th>Revision</th>
+						  <th>Rev Date</th>
+						  <th style="width: 30%;text-align: center;">Description</th> 
+						  <th>Category</th>
+						  <th>Compliance Level</th>
+						  <th>Track</th>
+						  <th> Implementation Plan</th>						 
+						  </tr>
+						  <tr>
+						  <td><input type="checkbox"></td>
+						  <td>ABCD</td>
+						  <td>12/11/2016</td>
+						  <td>ABCD</td> 
+						  <td>ALERT</td>
+						  <td>Depot</td>
+						  <td>N</td>
+						  <td></td>						 
+						  </tr>
+					 </tbody></table>					   
+                            
+											
+							</div>
 		</div>
 	</div>
 	<!-- /.col-lg-4 -->
@@ -143,80 +148,94 @@
 			<div class="panel-heading" style="background-color: #F2EFEB;">
 				Bulletin Details</div>
 			<div class="panel-body">
-				<table class="">
-					<!-- <tr>
-				  <td>Bulletin Type:</td>
-				  <td>Prdouct</td>
-				  <td>Product Line:</td>
-				  <td>TM2500</td>
-				  </tr> -->
-
-					<tbody>
-						<tr>
-							<td><label><font color="red">*</font>Revision:</label></td>
-							<td style="width: 25%;"><input type="textbox"
-								class="form-control"></td>
-							<td><label><font color="red">*</font>Description:<label></label></label></td>
-							<td><input type="textbox" class="form-control"></td>
-						</tr>
-
-						<!-- <tr>
+                  <table class="" style="
+    width: 100%;
+">
+				  
+				  
+				   <tbody><tr>	<td><table style="
+    border: 1px solid rgba(242, 239, 235, 0.98);
+    /* margin-top: 25px; */
+    width: 100%;
+    /* border: 1px solid rgba(47, 156, 228, 0.66); */
+    /* margin-top: 26px; */
+    /* box-shadow: 2px 2px 2px 1px rgba(47, 156, 228, 0.66); */
+    box-shadow: 2px 2px 2px 2px rgba(152, 135, 146, 0.45);
+    /* width: 100%; */
+"><tbody><tr><td><label><font color="red">*</font>Revision:</label></td>
+				  <td style="
+    width: 25%;
+"><input type="textbox" class="form-control"></td>
+				  <td><label><font color="red">*</font>Description:<label></label></label></td>
+				  <td><input type="textbox" class="form-control"></td>
+				  </tr>
+				  
+				  <!-- <tr>
 				  
 				  <td>Supercedes:</td>
 				  <td><select><option>select</option></select></td>
 				  </tr> -->
-
-
-						<tr>
-							<td><label><font color="red">*</font>Category:</label></td>
-							<td><select class="form-control"><option>select</option></select></td>
-							<td><label><font color="red">*</font>Compliance
-									Level:</label></td>
-							<td><select class="form-control"><option>select</option></select></td>
-						</tr>
-
-
-						<tr>
-							<td><label><font color="red">*</font>Timing:</label></td>
-							<td colspan="3"><select class="form-control"><option>select</option></select></td>
-
-						</tr>
-
-						<tr>
-							<td><label><font color="red">*</font>Rev Date:</label></td>
-							<td><input type="date" ng-bind="ComplainceDate"
-								class="ng-binding"></td>
-
-						</tr>
-
-						<tr>
-							<td><label>Track Implementation Plan:</label></td>
-							<td><input type="checkbox"></td>
-							<!-- <td><font color="red">*</font>Issue Date:</td>
-				  <td><input type="date" ng-bind="ComplainceDate" class="ng-binding"></td> -->
-							<td><label>Significant:</label></td>
-							<td><input type="checkbox"></td>
-						</tr>
-
-						<tr>
-							<td><label><font color="red">*</font>Voucher
-									Program:</label></td>
-							<td><input type="checkbox"></td>
-							<td><label><font color="red">*</font>Field
-									Implementation Metric:</label></td>
-							<td><input type="checkbox"></td>
-						</tr>
-
-						<tr>
-							<td><label>Remarks:</label></td>
-							<td colspan="3"><textarea class="form-control"></textarea></td>
-
-						</tr>
-
-					</tbody>
-				</table>
-				<!-- <hr> -->
-			</div>
+				  
+				  
+				   <tr>
+				  <td><label><font color="red">*</font>Category:</label></td>
+				  <td><select class="form-control"><option value="select">select</option></select></td>
+				  <td><label><font color="red">*</font>Compliance Level:</label></td>
+				  <td><select class="form-control"><option value="select">select</option></select></td>
+				  </tr>
+                     </tbody></table>
+                     <table style="
+    border: 1px solid rgba(242, 239, 235, 0.98);
+    /* margin-top: 25px; */
+    width: 100%;
+    /* border: 1px solid rgba(47, 156, 228, 0.66); */
+    /* margin-top: 26px; */
+    /* box-shadow: 2px 2px 2px 1px rgba(47, 156, 228, 0.66); */
+    box-shadow: 2px 2px 2px 2px rgba(152, 135, 146, 0.45);
+    /* width: 100%; */
+    margin-top: 20px;
+"><tbody><tr><td>
+				  
+				   </td></tr><tr>
+				  <td><label><font color="red">*</font>Timing:</label></td>
+				 <td colspan="7"><select id="timeID"  class="form-control" ng-multi-select  multiple="multiple"><option value="select">select</option></select></td>
+				  
+				  </tr>
+				  
+				   <tr>
+				  <td><label><font color="red">*</font>Rev Date:</label></td>
+				  <td colspan="7"><input type="date" ng-bind="ComplainceDate" class="ng-binding form-control"></td>
+				  
+				  </tr>
+				  
+				     
+				  
+				  <tr>
+				  <td><label><font color="red">*</font>Voucher Program:</label></td>
+				  <td style="
+"><input type="checkbox" style="
+"></td>
+				  <td><label><font color="red">*</font>Field Implementation Metric:</label></td>
+				  <td><input type="checkbox"></td>
+				   <td><label>Track Implementation Plan:</label></td>
+				  <td><input type="checkbox"></td>
+				  
+				  <td><label>Significant:</label></td>
+				  <td><input type="checkbox"></td>
+				
+				  </tr>
+				  
+				  <tr>
+				  <td><label>Remarks:</label></td>
+				  <td colspan="7"><textarea class="form-control"></textarea></td>
+				 
+				  </tr>
+				  
+                       </tbody></table>  </td></tr>
+				  
+				  </tbody></table>
+				  <!-- <hr> -->
+                </div>
 		</div>
 	</div>
 	<!-- <div class="row"> -->
@@ -233,7 +252,7 @@
 								<td><label>To:</label></td>
 							</tr>
 							<tr>
-								<td><select name="num" multiple="" style="width: 100%;">
+								<td style=" width: 45%;"><select name="num" multiple="" style="width: 100%;">
 										<option value="1">1</option>
 										<option value="2">2</option>
 										<option value="3">3</option>
@@ -258,7 +277,7 @@
 										</tbody>
 									</table>
 								</td>
-								<td><select name="num" multiple="" style="width: 100%;">
+								<td style="    width: 45%;"><select name="num" multiple="" style="width: 100%;">
 										<option value="1">1</option>
 										<option value="2">2</option>
 										<option value="3">3</option>
