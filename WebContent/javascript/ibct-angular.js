@@ -119,13 +119,13 @@ app
 					} ];
 
 					$http
-							.get(
-									'http://localhost:8090/ibct/Bulletin/TimingCodes')
-							.then(function(response) {
+					.get(
+							'http://localhost:8090/ibct/Bulletin/CodesOptions/TIMING_CODE')
+					.then(function(response) {
 
-								$scope.timing = response.data.data;
-								console.log($scope.timing);
-							});
+						$scope.timing = response.data.data;
+						//console.log($scope.timing);
+					});
 					function getBulletinTypeCode(bulletintype) {
 						if (bulletintype == "PRODUCT BULLETIN") {
 							return 20000043;
