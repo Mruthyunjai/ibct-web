@@ -2,7 +2,9 @@
 <head>
 <script
 	src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script>
+	<script type="text/javascript" src="../javascript/ui-bootstrap-tpls-2.3.1.min.js"></script>
 <script src="../javascript/ibct-angular.js"></script>
+
 <style>
 .panel-body {
 	padding: 15px;
@@ -47,7 +49,8 @@
 						<tr>
 							<td style="width: 25%;"><label for="disabledSelect"><font
 									color="red">*</font>Product Line:</label></td>
-							<td style="width: 200px;"><select id="disabledSelect" style="text-transform: uppercase;"
+							<td style="width: 200px;"><select id="disabledSelect"
+								style="text-transform: uppercase;"
 								ng-model="updateController.productLines"
 								ng-options="pl.productLine for pl in productLines track by pl.productLine"
 								ng-change="fillBulletins()" class="form-control"><option
@@ -56,42 +59,44 @@
 
 							<td style=""><label for="disabledSelect"><font
 									color="red">*</font>Bulletin Type:</label></td>
-							<td style="width: 21%;"><select id="disabledSelect" style="text-transform: uppercase;"
+							<td style="width: 21%;"><select id="disabledSelect"
+								style="text-transform: uppercase;"
 								ng-model="updateController.bulletinTypes"
 								ng-options="bl.codeDescription for bl in bulletinTypes track by bl.codeID"
 								ng-change="fillBulletins()" class="form-control" style=""><option
 										value="">select</option></select></td>
-							<td style=""><button type="button" class="btn btn-ge">Update
-									Bulletin</button></td>
+							<td style=""></td>
 						</tr>
 						<tr>
 							<td style=""><label for="disabledSelect"><font
 									color="red">*</font>Bulletin:</label></td>
-							<td style=""><select style="width: 100%;text-transform: uppercase;"
+							<td style=""><select
+								style="width: 100%; text-transform: uppercase;"
 								ng-disabled="formLink"
-								ng-model="updateController.bulletinNumbers" ng-change="changeBulletinRevisions(updateController.bulletinNumbers.bulletinNum)"
+								ng-model="updateController.bulletinNumbers"
+								ng-change="changeBulletinRevisions(updateController.bulletinNumbers.bulletinNum)"
 								ng-options="bulletin.bulletinNum for bulletin in bulletinNumbers track by bulletin.bulletinNum"
 								class="form-control"><option value="">select</option></select></td>
 							<td style=""><label for="disabledSelect">Status:</label></td>
 							<td style="">{{updateController.bulletinNumbers.bulletinStatus}}</td>
 							<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</tbody>
+						</tr>
+					</tbody>
 				</table>
 			</div>
 		</div>
 	</div>
-	
+
 	<div class="col-lg-12">
 		<div class="panel">
 			<div class="panel-heading" style="background-color: #F2EFEB;">
 				Bulletin Details</div>
 			<div class="panel-body">
-				<table style="">
+				<table style="" width="50%">
 					<tbody>
 
 						<tr>
-							<td><label>Bulletin#:</label></td>
+							<td width="25%"><label>Bulletin#:</label></td>
 							<td colspan="3">{{updateController.bulletinNumbers.bulletinNum}}</td>
 						</tr>
 						<tr>
@@ -103,7 +108,8 @@
 						</tr>
 						<tr>
 							<td><label>Issue Date:</label></td>
-							<td>{{updateController.bulletinNumbers.issueDate | date:'yyyy/MM/dd'}}</td>
+							<td>{{updateController.bulletinNumbers.issueDate |
+								date:'yyyy/MM/dd'}}</td>
 							<td></td>
 							<td><label>Supercedes</label></td>
 							<td>{{updateController.bulletinNumbers.supercededBulletinNum}}</td>
@@ -116,12 +122,12 @@
 			</div>
 		</div>
 	</div>
-	<div class="col-lg-12" >
+	<div class="col-lg-12">
 		<div class="panel">
 			<div class="panel-heading" style="background-color: #F2EFEB;">
 				Bulletin Revisions</div>
 			<div class="panel-body">
-				<table class="table-border" style="width:100%;">
+				<table class="table-border" style="width: 100%;">
 					<tbody>
 						<tr>
 							<th>Select</th>
@@ -130,18 +136,22 @@
 							<th style="width: 30%; text-align: center;">Description</th>
 							<th>Category</th>
 							<th>Compliance Level</th>
-							<th>Track<br/>Implementation Plan</th>
+							<th>Track<br />Implementation Plan
+							</th>
 						</tr>
 						<tr ng-model="revisions" ng-repeat="rev in revisions">
-							<td><input type="checkbox" id="{{rev.bulletinNum +'|'+ rev.revisionId +'|'+ rev.timingCode}}"></td>
+							<td><input type="radio" name="revisions" autocomplete="off"
+								ng-click="changeRevision(rev)"
+								id="{{rev.bulletinNum +'|'+ rev.revisionId +'|'+ rev.timingCode}}"></td>
 							<td>{{rev.revisionId}}</td>
 							<td>{{rev.revisionDate| date:'yyyy/MM/dd'}}</td>
 							<td>{{rev.revisionDescription}}</td>
 							<td>{{rev.category}}</td>
 							<td>{{rev.complianceLevel}}</td>
 							<td>{{rev.trackImplimentationPlan}}</td>
+							<td style="display: none;">{{rev.significant}}</td>
 						</tr>
-						
+
 					</tbody>
 				</table>
 
@@ -151,224 +161,248 @@
 	</div>
 	<!-- /.col-lg-4 -->
 	<div class="col-lg-12">
-	<div class="col-lg-12">
-		<div class="panel">
-			<div class="panel-heading" style="background-color: #F2EFEB;">
-				Editable Bulletin Details</div>
-			<div class="panel-body">
-				<table class="" style="width: 100%;">
+		<div class="col-lg-12">
+			<div class="panel">
+				<div class="panel-heading" style="background-color: #F2EFEB;">
+					Editable Bulletin Details</div>
+				<div class="panel-body">
+					<table class="" style="width: 100%;">
 
 
-					<tbody>
-						<tr>
-							<td><table
-									style="border: 1px solid rgba(242, 239, 235, 0.98);
+						<tbody>
+							<tr>
+								<td><table
+										style="border: 1px solid rgba(242, 239, 235, 0.98);
 	/* margin-top: 25px; */ width: 100%;
 	/* border: 1px solid rgba(47, 156, 228, 0.66); */
 	/* margin-top: 26px; */
 	/* box-shadow: 2px 2px 2px 1px rgba(47, 156, 228, 0.66); */ box-shadow: 2px 2px 2px 2px rgba(152, 135, 146, 0.45);">
-									<tbody>
-										<tr>
-											<td><label><font color="red">*</font>Revision:</label></td>
-											<td style="width: 25%;"><input type="textbox"
-												class="form-control" ng-model="updateController.revision"></td>
-											<td><label><font color="red">*</font>Description:<label></label></label></td>
-											<td><input type="textbox" class="form-control" ng-model="updateController.description"></td>
-										</tr>
+										<tbody>
+											<tr>
+												<td><label><font color="red">*</font>Revision:</label></td>
+												<td style="width: 25%;"><input type="textbox"
+													class="form-control" ng-model="changedRevision.revision"
+													text="{{changedRevision.revision}}"></td>
+												<td><label><font color="red">*</font>Description:<label></label></label></td>
+												<td><input type="textbox" class="form-control"
+													text="{{changedRevision.revisionDescription}}"
+													ng-model="changedRevision.revisionDescription"></td>
+											</tr>
 
-										<!-- <tr>
+											<!-- <tr>
 				  
 				  <td>Supercedes:</td>
 				  <td><select><option>select</option></select></td>
 				  </tr> -->
 
 
-										<tr>
-											<td><label><font color="red">*</font>Category:</label></td>
-											<td><select class="form-control" style="text-transform: uppercase;"
-												ng-model="updateController.bulletinCategory" ng-multi-select
-												ng-options="c.codeName +' - '+ c.codeDescription for c in bulletinCategory track by c.codeID"
-												ng-disabled="formLink"><option
-														value="">select</option></select></td>
-											<td><label><font color="red">*</font>Compliance
-													Level:</label></td>
-											<td><select class="form-control" ng-disabled="formLink"
-												style="width: 100%;text-transform: uppercase;"
-												ng-model="updateController.complianceLevel"
-												ng-options="cl.compLevel for cl in complianceLevel track by cl.compLevel"><option
-														value="">select</option></select></td>
-										</tr>
-									</tbody>
-								</table>
-								<table
-									style="border: 1px solid rgba(242, 239, 235, 0.98);
+											<tr>
+												<td><label><font color="red">*</font>Category:</label></td>
+												<td><select class="form-control"
+													style="text-transform: uppercase;"
+													ng-model="changedRevision.category" ng-multi-select
+													ng-options="c.codeDescription as [c.codeName,c.codeDescription].join(' - ')  for c in bulletinCategory"
+													ng-disabled="formLink"><option value="">select</option></select></td>
+												<td><label><font color="red">*</font>Compliance
+														Level:</label></td>
+												<td><select class="form-control" ng-disabled="formLink"
+													style="width: 100%; text-transform: uppercase;"
+													ng-model="changedRevision.complianceLevel"
+													ng-options="cl.codeID as [cl.codeID,cl.compLevel].join(' - ') for cl in complianceLevel track by cl.codeID"><option
+															value="">select</option></select></td>
+											</tr>
+										</tbody>
+									</table>
+									<table
+										style="border: 1px solid rgba(242, 239, 235, 0.98);
 	/* margin-top: 25px; */ width: 100%;
 	/* border: 1px solid rgba(47, 156, 228, 0.66); */
 	/* margin-top: 26px; */
 	/* box-shadow: 2px 2px 2px 1px rgba(47, 156, 228, 0.66); */ box-shadow: 2px 2px 2px 2px rgba(152, 135, 146, 0.45);
 	/* width: 100%; */ margin-top: 20px;">
-									<tbody>
-										<tr>
-											<td></td>
-										</tr>
-										<tr>
-											<td><label><font color="red">*</font>Timing:</label></td>
-											<td colspan="7"><select id="timeID" multiple="multiple"
-												class="form-control" size="5"
-												style="width: 100%; text-transform: uppercase;" disabled="disabled"
-												ng-model="updateController.timingSelected" ng-multi-select
-												ng-options="t.codeName +' - '+ t.codeDescription for t in timing track by t.codeID"
-												>
-
-											</select></td>
-
-										</tr>
-
-										<tr>
-											<td><label><font color="red">*</font>Rev Date:</label></td>
-											<td colspan="7"><input type="date"
-												ng-bind="ComplainceDate" class="ng-binding form-control"
-												ng-model="updateController.revDate"></td>
-
-										</tr>
-
-
-
-										<tr>
-											<td><label><font color="red">*</font>Voucher
-													Program:</label></td>
-											<td style=""><input type="checkbox" style="" ng-model="updateController.voucherProgram"></td>
-											<td><label><font color="red">*</font>Field
-													Implementation Metric:</label></td>
-											<td><input type="checkbox"></td>
-											<td><label>Track Implementation Plan:</label></td>
-											<td><input type="checkbox" ng-model="updateController.fieldImplementationMetric"></td>
-
-											<td><label>Significant:</label></td>
-											<td><input type="checkbox" ng-model="updateController.significant"></td>
-
-										</tr>
-
-										<tr>
-											<td><label>Remarks:</label></td>
-											<td colspan="7"><textarea class="form-control" ng-model="updateController.remarks"></textarea></td>
-
-										</tr>
-
-									</tbody>
-								</table></td>
-						</tr>
-
-					</tbody>
-				</table>
-				<!-- <hr> -->
-			</div>
-		</div>
-	</div>
-	<!-- <div class="row"> -->
-	<div class="col-lg-12">
-		<div class="panel panel-blue">
-			<div class="panel-heading">Included Serial Numbers</div>
-			<div class="panel-body">
-					<div class="col-lg-6">
-					<table class="">
-						<tbody>
-							<tr>
-								<td><label><font color="red">*</font>From:</label></td>
-								<td></td>
-								<td><label>To:</label></td>
-							</tr>
-							<tr>
-								<td style="width: 47%;"><select name="num" multiple
-									size="4" style="width: 100%;" ng-model="updateController.fromSN"
-									ng-options="fsn for fsn in fromSN track by fsn">
-										<option>select</option>
-										<option>select</option>
-										<option>select</option>
-										<option>select</option>
-								</select></td>
-								<td>
-									<table>
 										<tbody>
 											<tr>
-												<td>
-													<button type="button" class="btn btn-ge btn-width"
-														ng-click="addSN(updateController.fromSN,updateController.toSN)"
-														ng-disabled="formLink">Add</button>
-												</td>
+												<td></td>
 											</tr>
 											<tr>
-												<td>
-													<button type="button" class="btn btn-ge btn-width"
-														ng-disabled="formLink">Clear</button> <!-- <button id="save" style="background: url('../images/add_off.gif');    background-size: initial;    width: 67px;    height: 17px;    border: none;    background-repeat: no-repeat;"></button>
-                                  <br/>
-                                  <button id="save" style="background: url('../images/clear_off.gif');    background-size: initial;    width: 70px;    height: 17px;    border: none;    background-repeat: no-repeat;"></button> -->
-												</td>
-											</tr>
-										</tbody>
-									</table>
-								</td>
-								<td style="width: 47%;"><select name="num" size="4"
-									style="width: 100%;" ng-model="updateController.toSN"
-									ng-options="tsn for tsn in toSN track by tsn">
-										<option>select</option>
-										<option>select</option>
-										<option>select</option>
-										<option>select</option>
-								</select></td>
-							</tr>
-							<tr>
-							</tr>
-						</tbody>
-					</table>
-				</div>
+												<td><label><font color="red">*</font>Timing:</label></td>
+												<td colspan="7"><select id="timeID" multiple="multiple"
+													class="form-control" size="5"
+													style="width: 100%; text-transform: uppercase;"
+													ng-model="updateController.timingSelected" ng-multi-select
+													ng-options="t.codeName +' - '+ t.codeDescription disable when t.isdisabled for t in timing track by t.codeID">
 
-				<div class="col-lg-6">
-					<!-- <div class="panel panel-default"><div class="panel-body">				  <div class="panel panel-default"><div class="panel-body">				   -->
-					<table class="table">
-						<tbody>
-							<tr>
-								<td><label>select</label></td>
-								<td><label>From Serial#:</label></td>
-								<td><label>To Serial#:</label></td>
+												</select></td>
+
+											</tr>
+
+											<tr>
+												<td><label><font color="red">*</font>Rev Date:</label></td>
+												<td colspan="2"><input type="date" style="width: 30%"
+													class="ng-binding form-control"
+													ng-model="changedRevision.revisionDate"></td>
+
+											</tr>
+
+
+
+											<tr>
+												<td colspan="8"><table width="100%">
+														<tr>
+															<td><label>Voucher
+																	Program:&nbsp;&nbsp;&nbsp;</label><input type="checkbox"
+																ng-checked="changedRevision.voucherProgram==Y"
+																ng-true-value="'Y'" ng-false-value="'N'"
+																ng-model="changedRevision.voucherProgram"></td>
+															<td><label>Field
+																	Implementation Metric:&nbsp;&nbsp;&nbsp;</label><input type="checkbox"
+																ng-checked="changedRevision.fieldImplimentationMetric==Y"
+																ng-true-value="'Y'" ng-false-value="'N'"
+																ng-model="changedRevision.fieldImplimentationMetric" /></td>
+															<td><label>Track Implementation Plan:&nbsp;&nbsp;&nbsp;</label><input
+																type="checkbox"
+																ng-checked="changedRevision.trackImplimentationPlan==Y"
+																ng-true-value="'Y'" ng-false-value="'N'"
+																ng-model="changedRevision.trackImplimentationPlan" /></td>
+
+															<td><label>Significant:&nbsp;&nbsp;&nbsp;</label><input
+																type="checkbox"
+																ng-checked="changedRevision.significant==Y"
+																ng-true-value="'Y'" ng-false-value="'N'"
+																ng-model="changedRevision.significant" /></td>
+															<td><label>New
+																	Revision:&nbsp;&nbsp;&nbsp;</label><input type="checkbox"
+																ng-model="updateController.newRevision"></td>
+														</tr>
+													</table></td>
+
+
+											</tr>
+
+											<tr>
+												<td><label>Remarks:</label></td>
+												<td colspan="7"><textarea class="form-control"
+														ng-model="changedRevision.remarks"></textarea></td>
+
+											</tr>
+
+										</tbody>
+									</table></td>
 							</tr>
-							<tr ng-repeat="item in serialNumber">
-								<td><input type="checkbox"></td>
-								<td>{{item.fromSNum}}</td>
-								<td>{{item.toSNum}}</td>
-							</tr>
-							<tr>
-								<td colspan="3" style="border: none;">
-									<button id="delete" class="btn btn-ge btn-width" ng-click="removeItem($index)">Delete</button>
-									<!-- <button id="save" style="background: url('../images/delete_off.gif');    background-size: initial;    width: 67px;    height: 17px;    border: none;    background-repeat: no-repeat;"></button> -->
-									<!-- <img src="../images/clear_off.gif"//> -->
-								</td>
-							</tr>
+
 						</tbody>
 					</table>
+					<!-- <hr> -->
 				</div>
 			</div>
 		</div>
-	</div>
-	<!-- </div> -->
-	<div class="col-lg-6 pull-right" style="margin-bottom: 5px;">
-		<table style="background-color: #fff; border: none;">
-			<tbody>
-				<tr>
-					<td style="background-color: #fff; border: none;">
-						<!-- <button id="save" style="background: url('../images/save_off.gif');    background-size: initial;    width: 67px;    height: 17px;    border: none;    background-repeat: no-repeat;"></button>
+		<!-- <div class="row"> -->
+		<div class="col-lg-12">
+			<div class="panel panel-blue">
+				<div class="panel-heading">Included Serial Numbers</div>
+				<div class="panel-body">
+					<div class="col-lg-6">
+						<table class="">
+							<tbody>
+								<tr>
+									<td><label><font color="red">*</font>From:</label></td>
+									<td></td>
+									<td><label>To:</label></td>
+								</tr>
+								<tr>
+									<td style="width: 47%;"><select name="num" multiple
+										size="4" style="width: 100%;"
+										ng-model="updateController.fromSN"
+										ng-options="fsn for fsn in fromSN track by fsn">
+											<option>select</option>
+											<option>select</option>
+											<option>select</option>
+											<option>select</option>
+									</select></td>
+									<td>
+										<table>
+											<tbody>
+												<tr>
+													<td>
+														<button type="button" class="btn btn-ge btn-width"
+															ng-click="addSN(updateController.fromSN,updateController.toSN)"
+															ng-disabled="formLink">Add</button>
+													</td>
+												</tr>
+												<tr>
+													<td>
+														<button type="button" class="btn btn-ge btn-width"
+															ng-disabled="formLink">Clear</button> <!-- <button id="save" style="background: url('../images/add_off.gif');    background-size: initial;    width: 67px;    height: 17px;    border: none;    background-repeat: no-repeat;"></button>
+                                  <br/>
+                                  <button id="save" style="background: url('../images/clear_off.gif');    background-size: initial;    width: 70px;    height: 17px;    border: none;    background-repeat: no-repeat;"></button> -->
+													</td>
+												</tr>
+											</tbody>
+										</table>
+									</td>
+									<td style="width: 47%;"><select name="num" size="4"
+										style="width: 100%;" ng-model="updateController.toSN"
+										ng-options="tsn for tsn in toSN track by tsn">
+											<option>select</option>
+											<option>select</option>
+											<option>select</option>
+											<option>select</option>
+									</select></td>
+								</tr>
+								<tr>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+
+					<div class="col-lg-6">
+						<!-- <div class="panel panel-default"><div class="panel-body">				  <div class="panel panel-default"><div class="panel-body">				   -->
+						<table class="table">
+							<tbody>
+								<tr>
+									<td><label>select</label></td>
+									<td><label>From Serial#:</label></td>
+									<td><label>To Serial#:</label></td>
+								</tr>
+								<tr ng-repeat="item in serialNumber">
+									<td><input type="checkbox"></td>
+									<td>{{item.fromSNum}}</td>
+									<td>{{item.toSNum}}</td>
+								</tr>
+								<tr>
+									<td colspan="3" style="border: none;">
+										<button id="delete" class="btn btn-ge btn-width"
+											ng-click="removeItem($index)">Delete</button> <!-- <button id="save" style="background: url('../images/delete_off.gif');    background-size: initial;    width: 67px;    height: 17px;    border: none;    background-repeat: no-repeat;"></button> -->
+										<!-- <img src="../images/clear_off.gif"//> -->
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- </div> -->
+		<div class="col-lg-6 pull-right" style="margin-bottom: 5px;">
+			<table style="background-color: #fff; border: none;">
+				<tbody>
+					<tr>
+						<td style="background-color: #fff; border: none;">
+							<!-- <button id="save" style="background: url('../images/save_off.gif');    background-size: initial;    width: 67px;    height: 17px;    border: none;    background-repeat: no-repeat;"></button>
 					<button id="clear" style="background: url('../images/clear_off.gif');    background-size: initial;    width: 70px;    height: 17px;    border: none;    background-repeat: no-repeat;"></button>
 					<button id="close" style="background: url('../images/close_off.gif');    background-size: initial;    width: 67px;    height: 17px;    border: none;    background-repeat: no-repeat;"></button> -->
-						<button id="save" class="btn btn-ge btn-width" ng-click="updateBulletin(updateController.bulletinNumbers.bulletinStatus)">Save</button>
-						<button id="clear" class="btn btn-ge btn-width" ng-click="clearFormControlFields()">Clear</button>
-						<button id="cancel" class="btn btn-ge btn-width">Cancel</button>
-					</td>
-				</tr>
+							<button id="save" class="btn btn-ge btn-width"
+								ng-click="updateBulletin(updateController.bulletinNumbers.bulletinStatus)">Save</button>
+							<button id="clear" class="btn btn-ge btn-width"
+								ng-click="clearFormControlFields()">Clear</button>
+							<button id="cancel" class="btn btn-ge btn-width">Cancel</button>
+						</td>
+					</tr>
 
-			</tbody>
-		</table>
+				</tbody>
+			</table>
+		</div>
 	</div>
-</div>
 	<!-- /.col-lg-4 -->
 	<div class="col-lg-12">
 		<!-- <div class="panel panel-success">
